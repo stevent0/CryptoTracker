@@ -1,0 +1,19 @@
+POST http://localhost:5000/users/user HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Steven",
+    "email": "truongsteven107@gmail.com",
+    "password": "password"
+}
+
+###
+
+GET http://localhost:5000/users/user HTTP/1.1
+content-type: application/json
+
+{
+    "email": "truongsteven107@gmail.com",
+    "password": "password"
+}
+
