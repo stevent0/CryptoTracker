@@ -23,6 +23,33 @@ router.get("/:userId/assets", async (req, res) => {
     }
 })
 
+router.get("/:userId/assets/:searchKey", async (req, res) => {
+    const { userId, searchKey } = req.params
+
+    if (req.userIdFromJWT != userId) return res.sendStatus(400)
+
+    try {
+
+        const assetsQuery = await req.dbClient.query(`SELECT * FROM OWNS O`)
+        const lowerCaseSearchKey = searchKey.toLowerCase()
+
+        let rows = assetsQuery.rows
+
+        rows = rows.filter( (asset) => {
+            return asset["label"].toLowerCase().includes(lowerCaseSearchKey) 
+            || asset["abbreviation"].toLowerCase().includes(lowerCaseSearchKey) 
+            || asset["amount"].toString().toLowerCase().includes(lowerCaseSearchKey)
+        } )
+
+        res.json(rows)
+
+    }
+    catch (err) {
+        console.log(err)
+        return res.sendStatus(500)
+    }
+})
+
 router.post("/:userId/assets", async (req, res) => {
     const { userId } = req.params
     const { abbreviation, label, amount } = req.body

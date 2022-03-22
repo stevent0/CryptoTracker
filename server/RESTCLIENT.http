@@ -22,17 +22,19 @@ content-type: application/json
 
 GET http://localhost:5000/users/1/assets HTTP/1.1
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ3N0ZXZlbjEwN0BnbWFpbC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTY0Nzk4NTM1MSwiZXhwIjoxNjQ3OTg3MTUxfQ.14neXIyREwdZhsOB2kuBN-Dxmtddm4YlQPDY7OSI0q4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ3N0ZXZlbjEwN0BnbWFpbC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTY0Nzk4NzA4MywiZXhwIjoxNjQ3OTg4ODgzfQ.huK98VprvZ7nexv2hriooeiqB-pfb-CAqYD_QQt21so
 
-{
-    
-}
+###
+
+GET http://localhost:5000/users/1/assets/4 HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ3N0ZXZlbjEwN0BnbWFpbC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTY0Nzk4NzA4MywiZXhwIjoxNjQ3OTg4ODgzfQ.huK98VprvZ7nexv2hriooeiqB-pfb-CAqYD_QQt21so
 
 ###
 
 POST http://localhost:5000/users/1/assets HTTP/1.1
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ3N0ZXZlbjEwN0BnbWFpbC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTY0Nzk4NTM1MSwiZXhwIjoxNjQ3OTg3MTUxfQ.14neXIyREwdZhsOB2kuBN-Dxmtddm4YlQPDY7OSI0q4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ3N0ZXZlbjEwN0BnbWFpbC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTY0Nzk4NzA4MywiZXhwIjoxNjQ3OTg4ODgzfQ.huK98VprvZ7nexv2hriooeiqB-pfb-CAqYD_QQt21so
 
 {
     "abbreviation": "BTC",
