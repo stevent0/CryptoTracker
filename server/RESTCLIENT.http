@@ -1,4 +1,4 @@
-POST http://localhost:5000/users/user HTTP/1.1
+POST http://localhost:5000/accounts/user HTTP/1.1
 content-type: application/json
 
 {
@@ -9,7 +9,7 @@ content-type: application/json
 
 ###
 
-GET http://localhost:5000/users/user HTTP/1.1
+GET http://localhost:5000/accounts/user HTTP/1.1
 content-type: application/json
 
 {
@@ -17,3 +17,25 @@ content-type: application/json
     "password": "password"
 }
 
+###
+
+
+GET http://localhost:5000/users/1/assets HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ3N0ZXZlbjEwN0BnbWFpbC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTY0Nzk4NTM1MSwiZXhwIjoxNjQ3OTg3MTUxfQ.14neXIyREwdZhsOB2kuBN-Dxmtddm4YlQPDY7OSI0q4
+
+{
+    
+}
+
+###
+
+POST http://localhost:5000/users/1/assets HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ3N0ZXZlbjEwN0BnbWFpbC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTY0Nzk4NTM1MSwiZXhwIjoxNjQ3OTg3MTUxfQ.14neXIyREwdZhsOB2kuBN-Dxmtddm4YlQPDY7OSI0q4
+
+{
+    "abbreviation": "BTC",
+    "label": "My BTC Wallet 4",
+    "amount": 1.6526
+}

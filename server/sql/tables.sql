@@ -14,17 +14,18 @@ CREATE TABLE USR (
 
 CREATE TABLE CRYPTOCURRENCY (
     cryptoName varchar(30),
-    abbreviation varchar(10),
-    PRIMARY KEY(cryptoName)
+    abbreviation varchar(10) UNIQUE,
+    PRIMARY KEY(abbreviation)
 );
 
 CREATE TABLE OWNS (
+    id int,
     userId int,
-    cryptoName varchar(30),
+    abbreviation varchar(10),
     label varchar(45),
     amount double precision,
-    PRIMARY KEY(userId, cryptoName),
+    PRIMARY KEY(id),
     FOREIGN KEY (userId) REFERENCES USR,
-    FOREIGN KEY (cryptoname) REFERENCES CRYPTOCURRENCY
+    FOREIGN KEY (abbreviation) REFERENCES CRYPTOCURRENCY
 );
 

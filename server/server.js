@@ -1,5 +1,6 @@
 const express = require('express')  
-const users = require('./users.js');
+const accounts = require('./accounts.js')
+const users = require('./users.js')
 const csv = require('csv-parser')
 const fs = require('fs')
 
@@ -19,26 +20,14 @@ const client = new Client({
 client.connect()
 
 
-function authorizeUser(req, res, next) {
-    const jwtToken = req.headers["authorization"].split(" ")[1]
 
-    jwt.verify(token, "SECRET KEY", (err, decoded) => {
 
-        if (err) return res.sendStatus(500)
 
-        req.email = decoded["email"]
-        next()
-        
-    })
-}
-
+app.use(express.json())
 app.use((req, res, next) => {req.dbClient = client; next()})
-app.use('/users', users)
+app.use('/accounts', accounts)
+app.use("/users", users)
 
-
-app.get('/', (req, res, next) => {
-
-})
 
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`)
