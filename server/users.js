@@ -1,28 +1,42 @@
 const express = require('express')
-const router = express.Router()
 const bcrypt = require('bcrypt')
-
-
+const jwt = require('jsonwebtoken')
+const router = express.Router()
 
 router.use(express.json())
 
 
-let arr = []
-
-
-router.get('/user', (req, res) => {
+router.get('/user', async (req, res) => {
     const {email, password} = req.body
 
     if (!email || !password) return res.sendStatus(400)
 
-    let hash = arr[0].hash
-    bcrypt.compare(password, hash, function(err, result) {
+    try {
+        const queryUserAccount = await req.dbClient.query(`SELECT U.email, U.password FROM USR U WHERE U.email = '${email}'`)
+        if (queryUserAccount.rows.length == 0) return res.sendStatus(400)
+
+        const hashedPassword = queryUserAccount.rows[0]["password"]
+
+        bcrypt.compare(password, hashedPassword, function(err, result) {
         
-        if (err) return res.sendStatus(400)
+            if (err) return res.sendStatus(400)
 
-        console.log(result)
-    })
+            if (result) {
+                const jwtToken = jwt.sign({ email }, "SECRET KEY", {expiresIn: "30m"})
+                console.log(`${email} has logged in`)
+                res.json({jwtToken})
+            }
+            else {
+                return res.sendStatus(400)  
+            }
 
+        })
+
+    }
+    catch (err) {
+        console.log(err.message)
+        return res.sendStatus(400)
+    }
 
 }) 
 
@@ -34,10 +48,11 @@ router.post('/user', async (req, res) => {
     if (!email || !password) return res.sendStatus(400)
 
     try {
-        const user = await req.dbClient.query(`SELECT U.email FROM USR U WHERE U.email = '${email}'`)
-        if (user.rows.length > 0) return res.sendStatus(400)
+        const queryUserEmail = await req.dbClient.query(`SELECT U.email FROM USR U WHERE U.email = '${email}'`)
+        if (queryUserEmail.rows.length > 0) return res.sendStatus(400)
     }
     catch (err) {
+        console.log(err.message)
         return res.sendStatus(400)
     }
 
@@ -48,10 +63,9 @@ router.post('/user', async (req, res) => {
         if (err) return res.sendStatus(400)
 
         try {
-            const queryResult = await req.dbClient.query(`SELECT COALESCE(MAX(U.userId), 0) FROM USR U`)
-            const nextUserId = queryResult.rows[0]["coalesce"]
-            console.log(`INSERT INTO USR (userId, email, password, name, verified) VALUES ( ${nextUserId+1}, '${email}', '${hash}', '${name}', 'true')`)
-            await req.dbClient.query(`INSERT INTO USR (userId, email, password, name, verified) VALUES (${nextUserId+1}, '${email}', '${hash}', '${name}', 'true')`)
+            const queryUserId = await req.dbClient.query(`SELECT COALESCE(MAX(U.userId), 0) FROM USR U`)
+            const nextUserId = queryUserId.rows[0]["coalesce"]
+            await req.dbClient.query(`INSERT INTO USR (userId, email, password, name, verified) VALUES (${nextUserId+1}, '${email}', '${hash}', '${name}', 'false')`)
         }
         catch (err) {
             console.log(err.message)
