@@ -23,6 +23,7 @@ CREATE TABLE OWNS (
     userId int,
     abbreviation varchar(10),
     label varchar(45),
+    publicAddress varchar(200),
     amount double precision,
     PRIMARY KEY(id),
     FOREIGN KEY (userId) REFERENCES USR,

@@ -4,9 +4,11 @@ function authorizeUser(req, res, next) {
     const jwtToken = req.headers["authorization"].split(" ")[1]
 
 
+
     jwt.verify(jwtToken, "SECRET KEY", async (err, decoded) => {
 
         if (err) return res.sendStatus(500)
+
 
         try {
             const email = decoded["email"]

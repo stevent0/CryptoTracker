@@ -25,7 +25,7 @@ router.get('/user', async (req, res) => {
             if (err) return res.sendStatus(400)
 
             if (result) {
-                const jwtToken = jwt.sign({ email, userId }, "SECRET KEY", {expiresIn: "30m"})
+                const jwtToken = jwt.sign({ email, userId }, "SECRET KEY", {expiresIn: "1hr"})
                 console.log(`${email} has logged in`)
                 res.json({jwtToken})
             }
@@ -69,6 +69,7 @@ router.post('/user', async (req, res) => {
             const queryUserId = await req.dbClient.query(`SELECT COALESCE(MAX(U.userId), 0) FROM USR U`)
             const nextUserId = queryUserId.rows[0]["coalesce"]
             await req.dbClient.query(`INSERT INTO USR (userId, email, password, name, verified) VALUES (${nextUserId+1}, '${email}', '${hash}', '${name}', 'false')`)
+            res.sendStatus(200)
         }
         catch (err) {
             console.log(err.message)
