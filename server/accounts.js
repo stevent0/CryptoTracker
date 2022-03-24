@@ -12,7 +12,7 @@ router.get('/user', async (req, res) => {
 
     try {
         const queryUserAccount = await req.dbClient.query(`SELECT U.userId, U.email, U.password FROM USR U WHERE U.email = '${email}'`)
-        if (queryUserAccount.rows.length == 0) return res.sendStatus(400)
+        if (queryUserAccount.rows.length == 0) return res.status(400).send("Account does not exist.")
 
         const hashedPassword = queryUserAccount.rows[0]["password"]
         const userId = queryUserAccount.rows[0]["userid"]
@@ -30,7 +30,7 @@ router.get('/user', async (req, res) => {
                 res.json({jwtToken})
             }
             else {
-                return res.sendStatus(400)  
+                return res.status(400).send("Incorrect password.")
             }
 
         })
@@ -52,7 +52,7 @@ router.post('/user', async (req, res) => {
 
     try {
         const queryUserEmail = await req.dbClient.query(`SELECT U.email FROM USR U WHERE U.email = '${email}'`)
-        if (queryUserEmail.rows.length > 0) return res.sendStatus(400)
+        if (queryUserEmail.rows.length > 0) return res.status(400).send("An account already exists.")
     }
     catch (err) {
         console.log(err.message)
@@ -63,7 +63,7 @@ router.post('/user', async (req, res) => {
     const saltRounds = 10
     bcrypt.hash(password, saltRounds, async (err, hash) => {
 
-        if (err) return res.sendStatus(400)
+        if (err) return res.status(500).sendStatus("There was a problem creating your account.")
 
         try {
             const queryUserId = await req.dbClient.query(`SELECT COALESCE(MAX(U.userId), 0) FROM USR U`)
@@ -73,7 +73,7 @@ router.post('/user', async (req, res) => {
         }
         catch (err) {
             console.log(err.message)
-            return res.sendStatus(400)
+            return res.status(500).sendStatus("There was a problem creating your account.")
         }
 
     })
