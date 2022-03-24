@@ -101,7 +101,26 @@ router.delete("/:userId/assets/:ownsId", async (req, res) => {
     if (req.userIdFromJWT != userId) return res.sendStatus(400)
 
     try {
-        const deletionQuery = await req.dbClient.query(`DELETE FROM OWNS WHERE id = ${ownsId} RETURNING *`)
+        const deletionQuery = await req.dbClient.query(`DELETE FROM OWNS WHERE id = ${ownsId} AND userId = '${userId}' RETURNING *`)
+        if (deletionQuery.rows.length == 0) return res.sendStatus(400)
+        res.sendStatus(200)
+    }
+    catch (err) {
+        console.log(err)
+        return res.sendStatus(500)
+    }
+})
+
+
+
+router.patch("/:userId/assets/:ownsId", async (req, res) => {
+    const { userId, ownsId } = req.params
+    const { label, publicAddress, amount } = req.body
+
+    if (req.userIdFromJWT != userId) return res.sendStatus(400)
+
+    try {
+        const deletionQuery = await req.dbClient.query(`UPDATE OWNS SET label = '${label}', publicAddress = '${publicAddress}', amount = ${amount} WHERE id = ${ownsId} AND userId = '${userId}' RETURNING *`)
         if (deletionQuery.rows.length == 0) return res.sendStatus(400)
         res.sendStatus(200)
     }

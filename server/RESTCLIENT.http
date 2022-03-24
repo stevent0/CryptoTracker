@@ -41,10 +41,21 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ
 }
 
 ### DELETE AN ASSET FROM USER'S LIST
-DELETE http://localhost:5000/users/1/assets/2 HTTP/1.1
+DELETE http://localhost:5000/users/1/assets/4 HTTP/1.1
 content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ3N0ZXZlbjEwN0BnbWFpbC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTY0ODE0NzkwOCwiZXhwIjoxNjQ4MjM0MzA4fQ._ULd7sDVukx1wVCJdyKoQaKgZJWe9fNp-h0b_GsdQLE
 
+### UPDATE AN ASSET FROM A USER'S LIST
+
+PATCH http://localhost:5000/users/1/assets/5 HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ3N0ZXZlbjEwN0BnbWFpbC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTY0ODE0NzkwOCwiZXhwIjoxNjQ4MjM0MzA4fQ._ULd7sDVukx1wVCJdyKoQaKgZJWe9fNp-h0b_GsdQLE
+
+{
+    "label": "My BTC 35",
+    "publicAddress": "0cjfj3jdfsfsfsfefjdnovfjjgero",
+    "amount": 1
+}
 
 ### FETCH TOTAL VALUE OF USER'S ASSETS
 GET http://localhost:5000/users/1/assets-value HTTP/1.1
