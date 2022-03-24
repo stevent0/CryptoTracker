@@ -14,7 +14,7 @@ router.get("/:userId/assets", async (req, res) => {
     try {
 
         let queryString = ""
-        queryString += `SELECT O.id, O.userId, O.cryptoId, O.label, O.publicAddress, O.amount, C.usdPrice`
+        queryString += `SELECT O.id, O.userId, O.cryptoId, O.label, O.publicAddress, O.amount, C.usdPrice, C.logoUrl`
         queryString += ` FROM OWNS O, CRYPTOCURRENCY C`
         queryString += ` WHERE O.userId = ${userId} AND C.cryptoId = O.cryptoId`
 
@@ -42,7 +42,7 @@ router.get("/:userId/assets/:searchKey", async (req, res) => {
 
     try {
         let queryString = ""
-        queryString += `SELECT O.id, O.userId, O.cryptoId, O.label, O.publicAddress, O.amount, C.usdPrice`
+        queryString += `SELECT O.id, O.userId, O.cryptoId, O.label, O.publicAddress, O.amount, C.usdPrice, C.logoUrl`
         queryString += ` FROM OWNS O, CRYPTOCURRENCY C`
         queryString += ` WHERE O.userId = ${userId} AND C.cryptoId = O.cryptoId`
 
@@ -110,7 +110,6 @@ router.delete("/:userId/assets/:ownsId", async (req, res) => {
         return res.sendStatus(500)
     }
 })
-
 
 
 router.patch("/:userId/assets/:ownsId", async (req, res) => {
