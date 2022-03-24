@@ -41,7 +41,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ
 }
 
 ### DELETE AN ASSET FROM USER'S LIST
-DELETE http://localhost:5000/users/1/assets/4 HTTP/1.1
+DELETE http://localhost:5000/users/1/assets/5 HTTP/1.1
 content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ3N0ZXZlbjEwN0BnbWFpbC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTY0ODE0NzkwOCwiZXhwIjoxNjQ4MjM0MzA4fQ._ULd7sDVukx1wVCJdyKoQaKgZJWe9fNp-h0b_GsdQLE
 

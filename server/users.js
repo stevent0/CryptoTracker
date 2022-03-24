@@ -22,7 +22,7 @@ router.get("/:userId/assets", async (req, res) => {
         const rows = assetsQuery.rows
 
         for (let asset of rows) {
-            asset["value"] = asset["amount"] * asset["usdprice"]
+            asset["value"] = `$${(asset["amount"] * asset["usdprice"]).toFixed(2)}`
         }
 
         res.json(rows)
@@ -150,7 +150,7 @@ router.get("/:userId/assets-value", async (req, res) => {
             assetValue += (asset["amount"] * asset["usdprice"])
         }
 
-        res.json({assetValue})
+        res.send(`$${assetValue.toFixed(2)}`)
     }
     catch (err) {
         console.log(err)
