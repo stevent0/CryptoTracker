@@ -22,23 +22,28 @@ content-type: application/json
 
 GET http://localhost:5000/users/1/assets HTTP/1.1
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ3N0ZXZlbjEwN0BnbWFpbC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTY0Nzk4OTg5OSwiZXhwIjoxNjQ3OTkzNDk5fQ.LjFPdj2HbAuKEW_3kfCc4M4-CjePM7pUUaeufCJfr0o
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ3N0ZXZlbjEwN0BnbWFpbC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTY0Nzk5NTQwNiwiZXhwIjoxNjQ4MDgxODA2fQ.nfUAALmeJW7wACHLdlwE3mWSnOH2raKqywmhhe7Vq1M
 
 ###
 
 GET http://localhost:5000/users/1/assets/65 HTTP/1.1
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ3N0ZXZlbjEwN0BnbWFpbC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTY0Nzk4OTg5OSwiZXhwIjoxNjQ3OTkzNDk5fQ.LjFPdj2HbAuKEW_3kfCc4M4-CjePM7pUUaeufCJfr0o
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ3N0ZXZlbjEwN0BnbWFpbC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTY0Nzk5NTQwNiwiZXhwIjoxNjQ4MDgxODA2fQ.nfUAALmeJW7wACHLdlwE3mWSnOH2raKqywmhhe7Vq1M
 
 ###
 
 POST http://localhost:5000/users/1/assets HTTP/1.1
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ3N0ZXZlbjEwN0BnbWFpbC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTY0Nzk4OTg5OSwiZXhwIjoxNjQ3OTkzNDk5fQ.LjFPdj2HbAuKEW_3kfCc4M4-CjePM7pUUaeufCJfr0o
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ3N0ZXZlbjEwN0BnbWFpbC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTY0Nzk5NTQwNiwiZXhwIjoxNjQ4MDgxODA2fQ.nfUAALmeJW7wACHLdlwE3mWSnOH2raKqywmhhe7Vq1M
 
 {
-    "abbreviation": "BTC",
-    "label": "My BTC Wallet 4",
-    "publicAddress": "0cjfj3jdfjdnovfjjgero",
-    "amount": 1.6526
+    "abbreviation": "ETH",
+    "label": "My ETH",
+    "publicAddress": "0cjfj3jdfsfsfsfefjdnovfjjgero",
+    "amount": 15.6526
 }
+
+###
+
+GET http://localhost:5000/asset/BTC HTTP/1.1
+content-type: application/json

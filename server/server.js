@@ -1,8 +1,9 @@
 const express = require('express')  
+const axios = require('axios')
+require('dotenv').config()
 const accounts = require('./accounts.js')
 const users = require('./users.js')
-const csv = require('csv-parser')
-const fs = require('fs')
+const asset = require('./asset.js')
 
 const app = express()
 const PORT = process.env.PORT || 5000;
@@ -17,18 +18,55 @@ const client = new Client({
     database: 'postgres'
 })
 
-client.connect()
+client.connect().then( (res) => {
+    app.use(express.json())
+    app.use((req, res, next) => {req.dbClient = client; next()})
+    app.use('/accounts', accounts)
+    app.use("/users", users)
+    app.use("/asset", asset)
 
-
-
-
-
-app.use(express.json())
-app.use((req, res, next) => {req.dbClient = client; next()})
-app.use('/accounts', accounts)
-app.use("/users", users)
-
-
-app.listen(PORT, () => {
-    console.log(`Listening on port ${PORT}`)
+    updateCryptocurrencyColumns()
+    setInterval(() => updateCryptocurrencyColumns(), 650000)
+    
+    
+    app.listen(PORT, () => {
+        console.log(`Listening on port ${PORT}`)
+    })
 })
+
+
+
+
+async function updateCryptocurrencyColumns() {
+
+    let currentPage = 1
+
+    do {
+        axios({
+            method:  'get',
+            url: `https://api.nomics.com/v1/currencies/ticker?key=${process.env.NOMICS_API_KEY}`,
+            responseType: 'json',
+            params: { page: currentPage }
+        })
+        .then( (res) => {
+            if (!res.data) return
+            for (let asset of res.data) {
+                const {id, symbol, name, logo_url, price} = asset
+                let insertQueryStr = `INSERT INTO CRYPTOCURRENCY (cryptoId, cryptoName, abbreviation, usdPrice, logoUrl) `
+                insertQueryStr += `VALUES ('${id}', '', '${symbol}', ${parseFloat(price)}, '${logo_url}') ON CONFLICT (cryptoId) DO UPDATE SET usdPrice = ${parseInt(price)}`
+                client.query(insertQueryStr)
+            }
+        })
+
+        currentPage += 1
+
+        await new Promise( (resolve, reject) => setTimeout( () => resolve(''), 1700) )
+        console.log(currentPage)
+
+    } while (currentPage <= 400)
+
+}
+
+
+
+

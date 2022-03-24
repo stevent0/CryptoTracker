@@ -25,7 +25,7 @@ router.get('/user', async (req, res) => {
             if (err) return res.sendStatus(400)
 
             if (result) {
-                const jwtToken = jwt.sign({ email, userId }, "SECRET KEY", {expiresIn: "1hr"})
+                const jwtToken = jwt.sign({ email, userId }, "SECRET KEY", {expiresIn: "24hr"})
                 console.log(`${email} has logged in`)
                 res.json({jwtToken})
             }

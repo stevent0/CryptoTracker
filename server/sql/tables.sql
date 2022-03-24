@@ -13,20 +13,23 @@ CREATE TABLE USR (
 );
 
 CREATE TABLE CRYPTOCURRENCY (
-    cryptoName varchar(30),
-    abbreviation varchar(10) UNIQUE,
-    PRIMARY KEY(abbreviation)
+    cryptoId text,
+    cryptoName text,
+    abbreviation text,
+    usdPrice double precision,
+    logoUrl text,
+    PRIMARY KEY(cryptoId)
 );
 
 CREATE TABLE OWNS (
     id int,
     userId int,
-    abbreviation varchar(10),
+    cryptoId varchar(30),
     label varchar(45),
     publicAddress varchar(200),
     amount double precision,
     PRIMARY KEY(id),
     FOREIGN KEY (userId) REFERENCES USR,
-    FOREIGN KEY (abbreviation) REFERENCES CRYPTOCURRENCY
+    FOREIGN KEY (cryptoId) REFERENCES CRYPTOCURRENCY
 );
 
