@@ -1,3 +1,5 @@
+
+### CREATE ACCOUNT
 POST http://localhost:5000/accounts/user HTTP/1.1
 content-type: application/json
 
@@ -7,8 +9,7 @@ content-type: application/json
     "password": "password"
 }
 
-###
-
+### SIGN IN 
 GET http://localhost:5000/accounts/user HTTP/1.1
 content-type: application/json
 
@@ -17,41 +18,41 @@ content-type: application/json
     "password": "password"
 }
 
-###
-
-
+### FETCH ALL USER'S ASSETS
 GET http://localhost:5000/users/1/assets HTTP/1.1
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ3N0ZXZlbjEwN0BnbWFpbC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTY0ODA5ODY4NywiZXhwIjoxNjQ4MTg1MDg3fQ.Hhrs_m1sLXAsAnb1EXz0LDlURHsMQyiPY4F6oal4rm8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ3N0ZXZlbjEwN0BnbWFpbC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTY0ODE0NzkwOCwiZXhwIjoxNjQ4MjM0MzA4fQ._ULd7sDVukx1wVCJdyKoQaKgZJWe9fNp-h0b_GsdQLE
 
-###
-
+### FETCH ALL USER'S ASSET MATCHING SEARCH KEY
 GET http://localhost:5000/users/1/assets/test HTTP/1.1
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ3N0ZXZlbjEwN0BnbWFpbC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTY0ODA5ODY4NywiZXhwIjoxNjQ4MTg1MDg3fQ.Hhrs_m1sLXAsAnb1EXz0LDlURHsMQyiPY4F6oal4rm8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ3N0ZXZlbjEwN0BnbWFpbC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTY0ODE0NzkwOCwiZXhwIjoxNjQ4MjM0MzA4fQ._ULd7sDVukx1wVCJdyKoQaKgZJWe9fNp-h0b_GsdQLE
 
-###
-
+### ADD A NEW ASSET TO USER'S LIST
 POST http://localhost:5000/users/1/assets HTTP/1.1
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ3N0ZXZlbjEwN0BnbWFpbC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTY0ODA5ODY4NywiZXhwIjoxNjQ4MTg1MDg3fQ.Hhrs_m1sLXAsAnb1EXz0LDlURHsMQyiPY4F6oal4rm8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ3N0ZXZlbjEwN0BnbWFpbC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTY0ODE0NzkwOCwiZXhwIjoxNjQ4MjM0MzA4fQ._ULd7sDVukx1wVCJdyKoQaKgZJWe9fNp-h0b_GsdQLE
 
 {
     "cryptoId": "BTC",
-    "label": "My BTC 2",
+    "label": "My BTC 35",
     "publicAddress": "0cjfj3jdfsfsfsfefjdnovfjjgero",
-    "amount": 0.352
+    "amount": 0.3152
 }
 
-###
+### DELETE AN ASSET FROM USER'S LIST
+DELETE http://localhost:5000/users/1/assets/2 HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ3N0ZXZlbjEwN0BnbWFpbC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTY0ODE0NzkwOCwiZXhwIjoxNjQ4MjM0MzA4fQ._ULd7sDVukx1wVCJdyKoQaKgZJWe9fNp-h0b_GsdQLE
 
+
+### FETCH TOTAL VALUE OF USER'S ASSETS
 GET http://localhost:5000/users/1/assets-value HTTP/1.1
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ3N0ZXZlbjEwN0BnbWFpbC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTY0ODA5ODY4NywiZXhwIjoxNjQ4MTg1MDg3fQ.Hhrs_m1sLXAsAnb1EXz0LDlURHsMQyiPY4F6oal4rm8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ3N0ZXZlbjEwN0BnbWFpbC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTY0ODE0NzkwOCwiZXhwIjoxNjQ4MjM0MzA4fQ._ULd7sDVukx1wVCJdyKoQaKgZJWe9fNp-h0b_GsdQLE
 
 
-###
-
+### SEARCH ALL CRYPTOCURRENCIES IN DATABASE MATCHING SEARCH KEY
 GET http://localhost:5000/asset/BTC HTTP/1.1
 content-type: application/json
 

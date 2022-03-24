@@ -95,6 +95,22 @@ router.post("/:userId/assets", async (req, res) => {
     }
 })
 
+router.delete("/:userId/assets/:ownsId", async (req, res) => {
+    const { userId, ownsId } = req.params
+
+    if (req.userIdFromJWT != userId) return res.sendStatus(400)
+
+    try {
+        const deletionQuery = await req.dbClient.query(`DELETE FROM OWNS WHERE id = ${ownsId} RETURNING *`)
+        if (deletionQuery.rows.length == 0) return res.sendStatus(400)
+        res.sendStatus(200)
+    }
+    catch (err) {
+        console.log(err)
+        return res.sendStatus(500)
+    }
+})
+
 
 router.get("/:userId/assets-value", async (req, res) => {
     const { userId } = req.params

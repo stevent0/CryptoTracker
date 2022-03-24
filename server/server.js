@@ -31,6 +31,7 @@ client.connect().then( (res) => {
         console.log(`Listening on port ${PORT}`)
     })
 })
+.catch( (err) => console.log(err.message))
 
 
 
@@ -40,31 +41,34 @@ async function updateCryptocurrencyColumns() {
     let currentPage = 1
 
     while (true) {
-        axios({
-            method:  'get',
-            url: `https://api.nomics.com/v1/currencies/ticker?key=${process.env.NOMICS_API_KEY}`,
-            responseType: 'json',
-            params: { page: currentPage, status: "active" }
-        })
-        .then( (res) => {
-            console.log(res.data.length)
+        try {
+            axios({
+                method:  'get',
+                url: `https://api.nomics.com/v1/currencies/ticker?key=${process.env.NOMICS_API_KEY}`,
+                responseType: 'json',
+                params: { page: currentPage, status: "active" }
+            })
+            .then( (res) => {
+    
+                if (res.data.length == 0) {
+                    currentPage = 0
+                    return
+                }
+    
+                for (let asset of res.data) {
+                    const {id, logo_url, price} = asset
+                    let insertQueryStr = `INSERT INTO CRYPTOCURRENCY (cryptoId, usdPrice, logoUrl) `
+                    insertQueryStr += `VALUES ('${id}', ${parseFloat(price)}, '${logo_url}') ON CONFLICT (cryptoId) DO UPDATE SET usdPrice = ${parseFloat(price)}`
+                    client.query(insertQueryStr)
+                }
+            })
 
-            if (res.data.length == 0) {
-                currentPage = 0
-                return
-            }
-
-            for (let asset of res.data) {
-                const {id, logo_url, price} = asset
-                let insertQueryStr = `INSERT INTO CRYPTOCURRENCY (cryptoId, usdPrice, logoUrl) `
-                insertQueryStr += `VALUES ('${id}', ${parseFloat(price)}, '${logo_url}') ON CONFLICT (cryptoId) DO UPDATE SET usdPrice = ${parseFloat(price)}`
-                client.query(insertQueryStr)
-            }
-        })
-
-        console.log(currentPage)
-        currentPage += 1
-
+            currentPage += 1
+        }
+        catch (err) {
+            // Don't increment currentPage here to retry the failed request
+            console.log(err.message)
+        }
 
         await new Promise( (resolve, reject) => setTimeout( () => resolve(''), 1100) )
     }
