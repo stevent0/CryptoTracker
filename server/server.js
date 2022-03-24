@@ -26,8 +26,6 @@ client.connect().then( (res) => {
     app.use("/asset", asset)
 
     updateCryptocurrencyColumns()
-    setInterval(() => updateCryptocurrencyColumns(), 700000)
-    
     
     app.listen(PORT, () => {
         console.log(`Listening on port ${PORT}`)
@@ -41,7 +39,7 @@ async function updateCryptocurrencyColumns() {
 
     let currentPage = 1
 
-    do {
+    while (true) {
         axios({
             method:  'get',
             url: `https://api.nomics.com/v1/currencies/ticker?key=${process.env.NOMICS_API_KEY}`,
@@ -49,21 +47,27 @@ async function updateCryptocurrencyColumns() {
             params: { page: currentPage, status: "active" }
         })
         .then( (res) => {
-            if (!res.data) return
+            console.log(res.data.length)
+
+            if (res.data.length == 0) {
+                currentPage = 0
+                return
+            }
+
             for (let asset of res.data) {
-                const {id, symbol, name, logo_url, price} = asset
+                const {id, logo_url, price} = asset
                 let insertQueryStr = `INSERT INTO CRYPTOCURRENCY (cryptoId, usdPrice, logoUrl) `
                 insertQueryStr += `VALUES ('${id}', ${parseFloat(price)}, '${logo_url}') ON CONFLICT (cryptoId) DO UPDATE SET usdPrice = ${parseFloat(price)}`
                 client.query(insertQueryStr)
             }
         })
 
+        console.log(currentPage)
         currentPage += 1
 
-        await new Promise( (resolve, reject) => setTimeout( () => resolve(''), 1700) )
-        console.log(currentPage)
 
-    } while (currentPage <= 400)
+        await new Promise( (resolve, reject) => setTimeout( () => resolve(''), 1100) )
+    }
 
 }
 
