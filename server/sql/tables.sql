@@ -14,8 +14,6 @@ CREATE TABLE USR (
 
 CREATE TABLE CRYPTOCURRENCY (
     cryptoId text,
-    cryptoName text,
-    abbreviation text,
     usdPrice double precision,
     logoUrl text,
     PRIMARY KEY(cryptoId)

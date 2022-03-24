@@ -26,7 +26,7 @@ client.connect().then( (res) => {
     app.use("/asset", asset)
 
     updateCryptocurrencyColumns()
-    setInterval(() => updateCryptocurrencyColumns(), 650000)
+    setInterval(() => updateCryptocurrencyColumns(), 700000)
     
     
     app.listen(PORT, () => {
@@ -46,14 +46,14 @@ async function updateCryptocurrencyColumns() {
             method:  'get',
             url: `https://api.nomics.com/v1/currencies/ticker?key=${process.env.NOMICS_API_KEY}`,
             responseType: 'json',
-            params: { page: currentPage }
+            params: { page: currentPage, status: "active" }
         })
         .then( (res) => {
             if (!res.data) return
             for (let asset of res.data) {
                 const {id, symbol, name, logo_url, price} = asset
-                let insertQueryStr = `INSERT INTO CRYPTOCURRENCY (cryptoId, cryptoName, abbreviation, usdPrice, logoUrl) `
-                insertQueryStr += `VALUES ('${id}', '', '${symbol}', ${parseFloat(price)}, '${logo_url}') ON CONFLICT (cryptoId) DO UPDATE SET usdPrice = ${parseInt(price)}`
+                let insertQueryStr = `INSERT INTO CRYPTOCURRENCY (cryptoId, usdPrice, logoUrl) `
+                insertQueryStr += `VALUES ('${id}', ${parseFloat(price)}, '${logo_url}') ON CONFLICT (cryptoId) DO UPDATE SET usdPrice = ${parseFloat(price)}`
                 client.query(insertQueryStr)
             }
         })
