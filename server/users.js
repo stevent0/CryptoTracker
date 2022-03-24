@@ -21,6 +21,10 @@ router.get("/:userId/assets", async (req, res) => {
         const assetsQuery = await req.dbClient.query(queryString)
         const rows = assetsQuery.rows
 
+        for (let asset of rows) {
+            asset["value"] = asset["amount"] * asset["usdprice"]
+        }
+
         res.json(rows)
 
     }
