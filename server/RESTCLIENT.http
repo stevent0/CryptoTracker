@@ -21,7 +21,7 @@ content-type: application/json
 ### FETCH ALL USER'S ASSETS
 GET http://localhost:5000/users/1/assets HTTP/1.1
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ3N0ZXZlbjEwN0BnbWFpbC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTY0ODE0NzkwOCwiZXhwIjoxNjQ4MjM0MzA4fQ._ULd7sDVukx1wVCJdyKoQaKgZJWe9fNp-h0b_GsdQLE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRydW9uZ3N0ZXZlbjEwN0BnbWFpbC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTY0ODMyMjA0NCwiZXhwIjoxNjQ4NDA4NDQ0fQ.Iv3_tKCSNksOj5lwUASElDHAi7_J5KoCrVMtGx2Qee0
 
 ### FETCH ALL USER'S ASSET MATCHING SEARCH KEY
 GET http://localhost:5000/users/1/assets/test HTTP/1.1

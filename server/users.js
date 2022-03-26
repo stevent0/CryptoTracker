@@ -124,7 +124,7 @@ router.patch("/:userId/assets/:ownsId", async (req, res) => {
         res.sendStatus(200)
     }
     catch (err) {
-        console.log(err)
+        console.log(err.message)
         return res.status(500).send("Internal Server Error")
     }
 })

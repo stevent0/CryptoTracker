@@ -27,7 +27,7 @@ router.get('/user', async (req, res) => {
             if (result) {
                 const jwtToken = jwt.sign({ email, userId }, "SECRET KEY", {expiresIn: "24hr"})
                 console.log(`${email} has logged in`)
-                res.json({jwtToken})
+                res.json({jwtToken, userId})
             }
             else {
                 return res.status(400).send("Incorrect password.")
@@ -45,10 +45,12 @@ router.get('/user', async (req, res) => {
 
 router.post('/user', async (req, res) => {
 
-    const {name, email, password} = req.body
+    const {name, email, password, confirmPassword} = req.body
 
     
-    if (!email || !password) return res.sendStatus(400)
+    if (!email || !password || !confirmPassword || !name) return res.status(400).send("Missing required information.")
+    if (password != confirmPassword) return res.status(400).send("Passwords do not match.")
+
 
     try {
         const queryUserEmail = await req.dbClient.query(`SELECT U.email FROM USR U WHERE U.email = '${email}'`)
