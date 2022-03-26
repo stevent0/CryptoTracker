@@ -4,6 +4,7 @@ require('dotenv').config()
 const accounts = require('./accounts.js')
 const users = require('./users.js')
 const asset = require('./asset.js')
+const cors = require('cors')
 
 const app = express()
 const PORT = process.env.PORT || 5000;
@@ -19,6 +20,9 @@ const client = new Client({
 })
 
 client.connect().then( (res) => {
+    app.use(cors({
+        origin: "*"
+    }))
     app.use(express.json())
     app.use((req, res, next) => {req.dbClient = client; next()})
     app.use('/accounts', accounts)
