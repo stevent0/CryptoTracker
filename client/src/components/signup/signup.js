@@ -10,18 +10,18 @@ export default function Signup() {
                 <Typography align='center' sx={{ mb: 4, fontSize: 45, fontFamily: 'Patua One', fontWeight: 'bold', color: 'rgb(14, 60, 125)' }} >CryptoTracker</Typography>
                 <Grid container spacing={2} alignItems='center'>
                     <Grid item xs={12}>
-                        <TextField id="outlined-required" label="Name" name="name" required fullWidth />
+                        <TextField id="outlined-required" label="Name" name="name" autoComplete='off' required fullWidth />
                     </Grid>
 
                     <Grid item xs={12}>
-                        <TextField id="outlined-required" label="Email" name="email" required fullWidth />
+                        <TextField id="outlined-required" label="Email" name="email" autoComplete='off' required fullWidth />
                     </Grid>
 
                     <Grid item xs={12}>
-                        <TextField id="outlined-required" label="Password" name="password" required fullWidth />
+                        <TextField id="outlined-required" label="Password" name="password" autoComplete='off' required fullWidth />
                     </Grid>
                     <Grid item xs={12}>
-                        <TextField id="outlined-required" label="Confirm password" name="confirm-password" required fullWidth />
+                        <TextField id="outlined-required" label="Confirm password" name="confirm-password" autoComplete='off' required fullWidth />
                     </Grid>
                 </Grid>
 
