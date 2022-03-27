@@ -2,7 +2,7 @@ import {Table, TableContainer, TableHead, TableRow, TableCell, TableBody, Contai
 import { Box, AppBar, Toolbar, IconButton } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import { useEffect } from 'react'
-import { getAssets, logIn, updateAsset, deleteAsset, getAssetsValueOfUser } from '../../api/api'
+import { getAssets, logIn, updateAsset, deleteAsset, getAssetsValueOfUser, getHighestAssetValueOfUser } from '../../api/api'
 import { useState } from 'react'
 import { InputUnstyled } from '@mui/base'
 import Navbar from '../navbar/navbar.js'
@@ -14,6 +14,7 @@ export default function Dashboard() {
     const [assets, setAssets] = useState([])
     const [totalAssetValue, setTotalAssetValue] = useState("$0")
     const [searchKey, setSearchKey] = useState('')
+    const [highestAssetValue, setHighestAssetValue] = useState({})
     let navigate = useNavigate()
 
 
@@ -34,6 +35,10 @@ export default function Dashboard() {
             
             const assetValueResponse = await getAssetsValueOfUser(userId, jwt)
             setTotalAssetValue(assetValueResponse.data)
+
+            const highestAssetValue = await getHighestAssetValueOfUser(userId, jwt)
+            setHighestAssetValue(highestAssetValue.data)
+
     
         }
         catch (error) {
@@ -45,9 +50,7 @@ export default function Dashboard() {
     }
 
 
-    useEffect(() => fetchData(), [])
-
-    useEffect( () => fetchData(searchKey), [searchKey])
+    useEffect(() => fetchData(searchKey), [searchKey])
 
 
     return (
@@ -68,14 +71,14 @@ export default function Dashboard() {
 
                         </Card>
 
-                        {/* <Card variant="outlined" sx={{ width: "100%", height: 100, borderRadius: 0, mt: 1}}>
+                        <Card variant="outlined" sx={{ width: "100%", height: 100, borderRadius: 0, mt: 1}}>
 
                             <CardContent align="left">
-                                <Typography sx={{fontSize: '14px'}}>Total Value</Typography>
-                                <Typography sx={{fontSize: "36px"}}>{totalAssetValue}</Typography>
+                                <Typography sx={{fontSize: '14px'}}>Highest Valued Asset ({highestAssetValue.assetId})</Typography>
+                                <Typography sx={{fontSize: "36px"}}>{highestAssetValue.value}</Typography>
                             </CardContent>
 
-                        </Card> */}
+                        </Card>
                     </Grid>
 
                     <Grid item xs={12} lg={9}>

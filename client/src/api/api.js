@@ -95,6 +95,16 @@ export async function getAssetsValueOfUser(userId, jwt) {
     })
 }
 
+export async function getHighestAssetValueOfUser(userId, jwt) {
+    return await axios({
+        method: 'get',
+        url: `${URI}/users/${userId}/highest-value-asset`,
+        headers: {
+            Authorization: `Bearer ${jwt}`
+        }
+    })
+}
+
 async function getSupportedAssets(searchkey) {
     return await axios({
         method: 'get',

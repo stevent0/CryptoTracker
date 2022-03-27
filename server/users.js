@@ -169,4 +169,38 @@ router.get("/:userId/assets-value", async (req, res) => {
     }
 })
 
+router.get("/:userId/highest-value-asset", async (req, res) => {
+    const { userId } = req.params
+
+
+    if (req.userIdFromJWT != userId) return res.status(400).send("Invalid credentials.")
+
+    try {
+        let queryString = ""
+        queryString += `SELECT O.id, O.userId, O.cryptoId, O.label, O.publicAddress, O.amount, C.usdPrice`
+        queryString += ` FROM OWNS O, CRYPTOCURRENCY C`
+        queryString += ` WHERE O.userId = ${userId} AND C.cryptoId = O.cryptoId`
+
+        const assetsQuery = await req.dbClient.query(queryString)
+
+        let highestValueAsset = 0
+        let assetId = ""
+
+        for (let asset of assetsQuery.rows) {
+            const val = asset["amount"] * asset["usdprice"]
+            if (val > highestValueAsset) {
+                highestValueAsset = val
+                assetId = asset["cryptoid"]
+            }
+
+        }
+
+        res.json({value: `$${highestValueAsset.toFixed(2)}`, assetId })
+    }
+    catch (err) {
+        console.log(err)
+        return res.status(500).send("Internal Server Error")
+    }
+})
+
 module.exports = router
