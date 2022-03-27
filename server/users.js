@@ -129,6 +129,9 @@ router.patch("/:userId/assets/:ownsId", async (req, res) => {
     const { userId, ownsId } = req.params
     const { label, publicAddress, amount } = req.body
 
+    if (isNaN(amount)) return res.status(400).send("The amount must be a number.")
+    if (!label || !publicAddress || !amount || label.length == 0 || publicAddress.length == 0 || amount.length == 0) return res.status(400).send("Fields can't be empty.")
+
     if (req.userIdFromJWT != userId) return res.status(400).send("Invalid credentials.")
 
     try {

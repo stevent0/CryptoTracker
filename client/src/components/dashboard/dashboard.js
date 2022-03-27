@@ -84,6 +84,7 @@ export default function Dashboard() {
         }
         catch (err) {
             console.log(err.message)
+            setUpdateFormErr(err.response.data)
         }
     }
 
@@ -221,8 +222,8 @@ export default function Dashboard() {
 
                         </Container>
 
-                        <TableContainer align='center' sx={{ mt: 1, backgroundColor: 'rgb(240,240,240)', height: 750}}>
-                            <Table sx={{border: 0}}>
+                        <TableContainer align='center' sx={{ mt: 1, height: 600}}>
+                            <Table sx={{border: 1, border: '0px solid rgb(238,241,244)'}}>
                                 <TableHead>
                                     <TableRow sx={{}}>
                                         <TableCell sx ={{border: 0}}></TableCell>
@@ -263,9 +264,9 @@ export default function Dashboard() {
                     >
                         <Box sx={modalStyle}>
                             <Typography sx={{mb: 0, fontSize: 20}} align="center">UPDATE/DELETE AN ASSET</Typography>
-                            
+                                
                             <Box sx={{border: '1px solid rgb(238,241,244)', padding: 4, display: 'flex', flexDirection: 'column', justifyContent: 'space-between',height: 250}}>
-                                <Typography variant="p" sx={{mt: -2, fontSize: 12, color:'red'}} align="center">{addFormErr}</Typography>
+                                <Typography variant="p" sx={{mt: -2, fontSize: 12, color:'red'}} align="center">{updateFormErr}</Typography>
                                 <TextField required onChange={e => setLabelUM(e.target.value)} autoComplete="off" id="outlined-basic" label="Label" variant="outlined" defaultValue={labelUM}></TextField>
                                 <TextField required onChange={e => setPublicAddressUM(e.target.value)} autoComplete="off" id="outlined-basic" label="Public Address" variant="outlined" defaultValue={publicAddressUM}/>
                                 <TextField required onChange={e => setAmountUM(e.target.value)} autoComplete="off" id="outlined-basic" label="Amount Owned" variant="outlined" defaultValue={amountUM}/>
