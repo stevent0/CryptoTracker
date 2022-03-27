@@ -1,5 +1,5 @@
 import {Table, TableContainer, TableHead, TableRow, TableCell, TableBody, Container, Grid, Button, CardContent, Card, Typography, TextField, Paper, InputBase } from '@mui/material'
-import { Box, AppBar, Toolbar, IconButton, Modal, FormControl, CssBaseline, Link } from '@mui/material'
+import { Box, AppBar, Toolbar, IconButton, Modal, FormControl, CssBaseline, Link, CircularProgress  } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import { useEffect } from 'react'
 import { getAssets, logIn, updateAsset, deleteAsset, getAssetsValueOfUser, getHighestAssetValueOfUser, addAsset } from '../../api/api'
@@ -8,6 +8,7 @@ import { InputUnstyled } from '@mui/base'
 import Navbar from '../navbar/navbar.js'
 import Cookies from 'js-cookie'
 import { useNavigate } from "react-router-dom"
+import LoadingButton from '@mui/lab/LoadingButton'
 
 export default function Dashboard() {
 
@@ -25,8 +26,9 @@ export default function Dashboard() {
     const [publicAddress, setPublicAddress] = useState('')
     const [amount, setAmount] = useState('')
     const [addFormErr, setAddFormErr] = useState('')
+    const [addLoading, setAddLoading] = useState(false)
 
-    //Update Modal
+    // Update and Delete Modal
     const [openUpdateModal, setOpenUpdateModal] = useState(false)
     const handleOpenUpdateModal = (asset) => {
         setTargetAsset(asset)
@@ -41,6 +43,8 @@ export default function Dashboard() {
     const [amountUM, setAmountUM] = useState('')
     const [updateFormErr, setUpdateFormErr] = useState('')
     const [targetAsset, setTargetAsset] = useState(null)
+    const [updateLoading, setUpdateLoading] = useState(false)
+    const [deleteLoading, setDeleteLoading] = useState(false)
 
     let navigate = useNavigate()
 
@@ -48,6 +52,8 @@ export default function Dashboard() {
     const handleAddAsset = async () => {
         const jwt = Cookies.get('jwt')
         const userId = parseInt(Cookies.get('userId'))
+
+        setAddLoading(true)
 
         try {
             await addAsset(userId, {cryptoId, label, publicAddress, amount}, jwt)
@@ -63,11 +69,15 @@ export default function Dashboard() {
             console.log(err.response.data)
             setAddFormErr(err.response.data)
         }
+
+        setAddLoading(false)
     }
 
     const handleUpdateAsset = async () => {
         const jwt = Cookies.get('jwt')
         const userId = parseInt(Cookies.get('userId'))
+
+        setUpdateLoading(true)
 
         try {
             await updateAsset(userId, targetAsset.id, {label: labelUM, publicAddress: publicAddressUM, amount: amountUM}, jwt)
@@ -86,12 +96,15 @@ export default function Dashboard() {
             console.log(err.message)
             setUpdateFormErr(err.response.data)
         }
+
+        setUpdateLoading(false)
     }
 
     const handleDeleteAsset = async () => {
 
         const jwt = Cookies.get('jwt')
         const userId = parseInt(Cookies.get('userId'))
+        setDeleteLoading(true)
 
         try {
             await deleteAsset(userId, targetAsset.id, jwt)
@@ -107,6 +120,8 @@ export default function Dashboard() {
         catch (err) {
             console.log(err.message)
         }
+
+        setDeleteLoading(false)
     }
     
 
@@ -217,7 +232,9 @@ export default function Dashboard() {
 
                                         <Box sx={{border: 0, pl: 10, pr: 10, height: 30, mt: 2,  display: 'flex', alignContents: 'center', justifyContent: 'center', flexDirection: 'row'}}>
                                             <Button sx={{width: 100, backgroundColor: 'rgb(14, 60, 125)'}} onClick={handleAddAsset} variant="contained">
-                                                <Typography sx={{fontSize: 14, fontWeight: 'bold'}}>Add</Typography>
+                                                <Typography sx={{fontSize: 14, fontWeight: 'bold'}}>
+                                                    {addLoading ? <CircularProgress sx={{color: 'white', mt: 1}} size={22} /> : "Add"}
+                                                </Typography>
                                             </Button>
                                         </Box>
                                     </Box>
@@ -279,10 +296,14 @@ export default function Dashboard() {
 
                             <Box sx={{border: 0, height: 30, pl: 8, pr: 8, mt: 2,  display: 'flex', alignContents: 'center', justifyContent: 'space-between', flexDirection: 'row'}}>
                                 <Button sx={{width: 100, backgroundColor: 'rgb(14, 60, 125)'}} onClick={handleUpdateAsset} variant="contained">
-                                    <Typography sx={{fontSize: 14, fontWeight: 'bold'}}>Update</Typography>
+                                    <Typography sx={{fontSize: 14, fontWeight: 'bold'}}>
+                                        {updateLoading ? <CircularProgress sx={{color: 'white', mt: 1}} size={22} /> : "Update"}
+                                    </Typography>
                                 </Button>
-                                <Button sx={{width: 100, backgroundColor: 'rgb(14, 60, 125)'}} onClick={handleDeleteAsset} variant="contained">
-                                    <Typography sx={{fontSize: 14, fontWeight: 'bold'}}>Delete</Typography>
+                                <Button sx={{width: 100, backgroundColor: 'red'}} onClick={handleDeleteAsset} variant="contained">
+                                    <Typography sx={{fontSize: 14, fontWeight: 'bold'}}>
+                                        {deleteLoading ? <CircularProgress sx={{color: 'white', mt: 1}} size={22} /> : "Delete"}
+                                    </Typography>
                                 </Button>
                             </Box>
                         </Box>

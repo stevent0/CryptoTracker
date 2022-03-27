@@ -1,4 +1,4 @@
-import { Container, Typography, Box, Grid, TextField, Button } from '@mui/material'
+import { Container, Typography, Box, Grid, TextField, Button, CircularProgress } from '@mui/material'
 import { useState } from 'react'
 import { signUp } from '../../api/api'
 import { useNavigate } from 'react-router-dom'
@@ -11,9 +11,11 @@ export default function Signup() {
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const [errMsg, setErrMsg] = useState('')
+    const [signUpLoading, setSignUpLoading] = useState(false)
     let navigate = useNavigate()
 
     const handleSignUpClick = async () => {
+        setSignUpLoading(true)
         try {
             await signUp(name, email, password, confirmPassword)
             Cookies.set('jwt', '')
@@ -24,6 +26,7 @@ export default function Signup() {
             console.log(err.message)
             setErrMsg('*' + err.response.data + '*')
         }
+        setSignUpLoading(false)
     }
 
 
@@ -51,7 +54,9 @@ export default function Signup() {
                     </Grid>
                 </Grid>
 
-                <Button onClick={handleSignUpClick} type="submit" fullWidth variant="contained" sx={{ mt: 3, display: 'block', backgroundColor: 'rgb(14, 60, 125)'}}>Sign Up</Button>
+                <Button onClick={handleSignUpClick} type="submit" fullWidth variant="contained" sx={{ mt: 3, display: 'block', backgroundColor: 'rgb(14, 60, 125)'}}>
+                    {signUpLoading ? <CircularProgress sx={{color: 'white', mt: 1}} size={22} /> : "Sign Up"}
+                </Button>
             </Box>
 
 

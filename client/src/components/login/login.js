@@ -1,4 +1,4 @@
-import { Container, Typography, Box, Grid, TextField, Button } from '@mui/material'
+import { Container, Typography, Box, Grid, TextField, Button, CircularProgress } from '@mui/material'
 import { logIn } from '../../api/api'
 import { useState, useEffect } from 'react'
 import Cookies from 'js-cookie'
@@ -9,10 +9,12 @@ export default function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [errMsg, setErrMsg] = useState('')
+    const [logInLoading, setLogInLoading] = useState(false)
     let navigate = useNavigate()
 
 
     const handleLogin = async () => {
+        setLogInLoading(true)
         try {
             const response = await logIn(email, password)
             Cookies.set('jwt', response.data.jwtToken)
@@ -23,6 +25,7 @@ export default function Login() {
             console.log(err.response.data)
             setErrMsg("*" + err.response.data + "*")
         }
+        setLogInLoading(false)
     }
 
     useEffect( () => {
@@ -52,7 +55,9 @@ export default function Login() {
                     </Grid>
                 </Grid>
 
-                <Button onClick={handleLogin} type="submit" fullWidth variant="contained" sx={{ mt: 3, display: 'block', backgroundColor: 'rgb(14, 60, 125)'}}>Log In</Button>
+                <Button onClick={handleLogin} type="submit" fullWidth variant="contained" sx={{ mt: 3, display: 'block', backgroundColor: 'rgb(14, 60, 125)'}}>
+                    {logInLoading ? <CircularProgress sx={{color: 'white', mt: 1}} size={22} /> : "Log In"}
+                </Button>
             </Box>
 
 
