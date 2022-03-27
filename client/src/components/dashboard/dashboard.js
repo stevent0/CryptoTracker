@@ -196,7 +196,10 @@ export default function Dashboard() {
                             </Paper>
 
                             <Paper elevation={0} sx={{display: "flex", alignItems: "center"}}>
-                                <Button onClick={handleOpen} variant="contained" sx={{height: "100%", borderRadius: 3}}>Add</Button>
+                                <Button onClick={handleOpen} variant="contained" sx={{height: "100%", borderRadius: 2, backgroundColor: 'rgb(14, 60, 125)'}}>
+                                    <Typography sx={{fontSize: 14, fontWeight: 'bold'}}>Add</Typography>
+                                </Button>
+
                                 <Modal
                                     open={open}
                                     onClose={handleClose}
@@ -213,7 +216,9 @@ export default function Dashboard() {
                                         </Box>
 
                                         <Box sx={{border: 0, pl: 10, pr: 10, height: 30, mt: 2,  display: 'flex', alignContents: 'center', justifyContent: 'center', flexDirection: 'row'}}>
-                                            <Button sx={{width: 100}} onClick={handleAddAsset} variant="contained">Add</Button>
+                                            <Button sx={{width: 100, backgroundColor: 'rgb(14, 60, 125)'}} onClick={handleAddAsset} variant="contained">
+                                                <Typography sx={{fontSize: 14, fontWeight: 'bold'}}>Add</Typography>
+                                            </Button>
                                         </Box>
                                     </Box>
                                 </Modal>
@@ -273,8 +278,12 @@ export default function Dashboard() {
                             </Box>
 
                             <Box sx={{border: 0, height: 30, pl: 8, pr: 8, mt: 2,  display: 'flex', alignContents: 'center', justifyContent: 'space-between', flexDirection: 'row'}}>
-                                <Button sx={{width: 100}} onClick={handleUpdateAsset} variant="contained">Update</Button>
-                                <Button sx={{width: 100}} onClick={handleDeleteAsset} variant="contained">Delete</Button>
+                                <Button sx={{width: 100, backgroundColor: 'rgb(14, 60, 125)'}} onClick={handleUpdateAsset} variant="contained">
+                                    <Typography sx={{fontSize: 14, fontWeight: 'bold'}}>Update</Typography>
+                                </Button>
+                                <Button sx={{width: 100, backgroundColor: 'rgb(14, 60, 125)'}} onClick={handleDeleteAsset} variant="contained">
+                                    <Typography sx={{fontSize: 14, fontWeight: 'bold'}}>Delete</Typography>
+                                </Button>
                             </Box>
                         </Box>
                 </Modal>
