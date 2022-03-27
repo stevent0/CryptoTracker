@@ -52,7 +52,7 @@ export async function addAsset(userId, asset, jwt) {
 export async function getAssets(userId, jwt, searchKey) {
 
     let url = `${URI}/users/${userId}/assets`
-    if (searchKey) url += `/${searchKey}`
+    if (searchKey && searchKey.length > 0) url += `/${encodeURIComponent(searchKey)}`
 
     return axios({
         method: 'get',
@@ -98,7 +98,7 @@ export async function getAssetsValueOfUser(userId, jwt) {
 async function getSupportedAssets(searchkey) {
     return await axios({
         method: 'get',
-        url: `${URI}/asset/${searchkey}`,
+        url: `${URI}/asset/${encodeURIComponent(searchkey)}`,
     })
 }
 

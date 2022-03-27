@@ -38,7 +38,9 @@ router.get("/:userId/assets", async (req, res) => {
 
 
 router.get("/:userId/assets/:searchKey", async (req, res) => {
-    const { userId, searchKey } = req.params
+    let { userId, searchKey } = req.params
+
+    searchKey = decodeURIComponent(searchKey)
 
     if (req.userIdFromJWT != userId) return res.status(400).send("Invalid credentials.")
 
@@ -56,16 +58,19 @@ router.get("/:userId/assets/:searchKey", async (req, res) => {
 
         if (rows.length == 0) return res.json([])
 
+        for (let asset of rows) {
+            asset["value"] = `$${(asset["amount"] * asset["usdprice"]).toFixed(2)}`
+            asset["usdprice"] = `$${asset["usdprice"].toFixed(2)}`
+        }
+
         rows = rows.filter( (asset) => {
             return asset["label"].toLowerCase().includes(lowerCaseSearchKey) 
             || asset["publicaddress"].includes(lowerCaseSearchKey)
             || asset["cryptoid"].toLowerCase().includes(lowerCaseSearchKey) 
             || asset["amount"].toString().toLowerCase().includes(lowerCaseSearchKey)
+            || asset["value"].toString().toLowerCase().includes(lowerCaseSearchKey)
         } )
 
-        for (let asset of rows) {
-            asset["usdprice"] = `$${asset["usdprice"].toFixed(2)}`
-        }
 
         res.json(rows)
 

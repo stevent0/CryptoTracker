@@ -13,6 +13,7 @@ export default function Dashboard() {
 
     const [assets, setAssets] = useState([])
     const [totalAssetValue, setTotalAssetValue] = useState("$0")
+    const [searchKey, setSearchKey] = useState('')
     let navigate = useNavigate()
 
 
@@ -21,34 +22,32 @@ export default function Dashboard() {
         return address.slice(0, 6) + "..." + address.slice(-4)
     }
 
+    async function fetchData(searchKey="") {
 
-    useEffect(() => {
+        const jwt = Cookies.get('jwt')
+        const userId = parseInt(Cookies.get('userId'))
 
-        async function fetchData() {
-
-            const jwt = Cookies.get('jwt')
-            const userId = parseInt(Cookies.get('userId'))
-
-            try {
-                
-                const assetsResponse = await getAssets(userId, jwt)
-                setAssets(assetsResponse.data)
-                
-                const assetValueResponse = await getAssetsValueOfUser(userId, jwt)
-                setTotalAssetValue(assetValueResponse.data)
-        
-            }
-            catch (error) {
-                console.log(error.message)
-                Cookies.set('jwt', "")
-                Cookies.set('userId', "")
-                navigate("/login")
-            }
+        try {
+            
+            const assetsResponse = await getAssets(userId, jwt, searchKey)
+            setAssets(assetsResponse.data)
+            
+            const assetValueResponse = await getAssetsValueOfUser(userId, jwt)
+            setTotalAssetValue(assetValueResponse.data)
+    
         }
+        catch (error) {
+            console.log(error.message)
+            Cookies.set('jwt', "")
+            Cookies.set('userId', "")
+            navigate("/login")
+        }
+    }
 
-        fetchData()
 
-    }, [])
+    useEffect(() => fetchData(), [])
+
+    useEffect( () => fetchData(searchKey), [searchKey])
 
 
     return (
@@ -83,7 +82,7 @@ export default function Dashboard() {
                         <Container disableGutters sx={{border: 0, display: "flex", justifyContent: "space-between", height: 40}}>
 
                             <Paper elevation={0} square sx={{display: "flex", alignItems: "center", backgroundColor: 'rgb(238,241,244)', borderRadius: 3}}>
-                                <InputBase sx={{border: 0, ml: 1, height: "25px", width: 360}} placeholder="Search...">
+                                <InputBase onChange={e => setSearchKey(e.target.value)} sx={{border: 0, ml: 1, height: "25px", width: 360}} placeholder="Search...">
 
                                 </InputBase>
                             </Paper>
