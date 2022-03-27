@@ -1,5 +1,5 @@
 import {Table, TableContainer, TableHead, TableRow, TableCell, TableBody, Container, Grid, Button, CardContent, Card, Typography, TextField, Paper, InputBase } from '@mui/material'
-import { Box, AppBar, Toolbar, IconButton, Modal, FormControl, CssBaseline } from '@mui/material'
+import { Box, AppBar, Toolbar, IconButton, Modal, FormControl, CssBaseline, Link } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import { useEffect } from 'react'
 import { getAssets, logIn, updateAsset, deleteAsset, getAssetsValueOfUser, getHighestAssetValueOfUser, addAsset } from '../../api/api'
@@ -16,7 +16,7 @@ export default function Dashboard() {
     const [searchKey, setSearchKey] = useState('')
     const [highestAssetValue, setHighestAssetValue] = useState({})
 
-    //Modal
+    //Add Modal
     const [open, setOpen] = useState(false)
     const handleOpen = () => setOpen(true)
     const handleClose = () => {setOpen(false); setAddFormErr('')}
@@ -25,6 +25,25 @@ export default function Dashboard() {
     const [publicAddress, setPublicAddress] = useState('')
     const [amount, setAmount] = useState('')
     const [addFormErr, setAddFormErr] = useState('')
+
+    //Update Modal
+    const [openUpdateModal, setOpenUpdateModal] = useState(false)
+    const handleOpenUpdateModal = (asset) => {
+        setTargetAsset(asset)
+        setOpenUpdateModal(true)
+        setLabelUM(asset["label"])
+        setPublicAddressUM(asset["publicaddress"])
+        setAmountUM(asset["amount"])
+    }
+    const handleCloseUpdateModal = () => {setOpenUpdateModal(false); setUpdateFormErr('')}
+    const [labelUM, setLabelUM] = useState('')
+    const [publicAddressUM, setPublicAddressUM] = useState('')
+    const [amountUM, setAmountUM] = useState('')
+    const [updateFormErr, setUpdateFormErr] = useState('')
+    const [targetAsset, setTargetAsset] = useState(null)
+
+    let navigate = useNavigate()
+
     
     const handleAddAsset = async () => {
         const jwt = Cookies.get('jwt')
@@ -46,7 +65,49 @@ export default function Dashboard() {
         }
     }
 
-    let navigate = useNavigate()
+    const handleUpdateAsset = async () => {
+        const jwt = Cookies.get('jwt')
+        const userId = parseInt(Cookies.get('userId'))
+
+        try {
+            await updateAsset(userId, targetAsset.id, {label: labelUM, publicAddress: publicAddressUM, amount: amountUM}, jwt)
+
+            const getAssetsRes = await getAssets(userId, jwt, searchKey)
+            const getAssetsValRes = await getAssetsValueOfUser(userId, jwt)
+            const getHighestValRes = await getHighestAssetValueOfUser(userId, jwt)
+
+            setAssets(getAssetsRes.data)
+            setTotalAssetValue(getAssetsValRes.data)
+            setHighestAssetValue(getHighestValRes.data)
+
+            handleCloseUpdateModal()
+        }
+        catch (err) {
+            console.log(err.message)
+        }
+    }
+
+    const handleDeleteAsset = async () => {
+
+        const jwt = Cookies.get('jwt')
+        const userId = parseInt(Cookies.get('userId'))
+
+        try {
+            await deleteAsset(userId, targetAsset.id, jwt)
+            const getAssetsRes = await getAssets(userId, jwt, searchKey)
+            const getAssetsValRes = await getAssetsValueOfUser(userId, jwt)
+            const getHighestValRes = await getHighestAssetValueOfUser(userId, jwt)
+
+            setAssets(getAssetsRes.data)
+            setTotalAssetValue(getAssetsValRes.data)
+            setHighestAssetValue(getHighestValRes.data)
+            handleCloseUpdateModal()
+        }
+        catch (err) {
+            console.log(err.message)
+        }
+    }
+    
 
     const modalStyle = {
         position: 'absolute',
@@ -150,8 +211,8 @@ export default function Dashboard() {
                                             <TextField required onChange={e => setAmount(e.target.value)} autoComplete="off" id="outlined-basic" label="Amount Owned" variant="outlined" />
                                         </Box>
 
-                                        <Box sx={{border: 0, pl: 10, pr: 10, height: 60,  display: 'flex', alignContents: 'center', justifyContent: 'center', flexDirection: 'column'}}>
-                                            <Button onClick={handleAddAsset} variant="contained">Add</Button>
+                                        <Box sx={{border: 0, pl: 10, pr: 10, height: 30, mt: 2,  display: 'flex', alignContents: 'center', justifyContent: 'center', flexDirection: 'row'}}>
+                                            <Button sx={{width: 100}} onClick={handleAddAsset} variant="contained">Add</Button>
                                         </Box>
                                     </Box>
                                 </Modal>
@@ -160,7 +221,7 @@ export default function Dashboard() {
 
                         </Container>
 
-                        <TableContainer align='center' sx={{ mt: 1, backgroundColor: 'rgb(240,240,240)'}}>
+                        <TableContainer align='center' sx={{ mt: 1, backgroundColor: 'rgb(240,240,240)', height: 750}}>
                             <Table sx={{border: 0}}>
                                 <TableHead>
                                     <TableRow sx={{}}>
@@ -181,13 +242,12 @@ export default function Dashboard() {
                                             <TableRow key={asset.name} >
                                                 <TableCell sx ={{border: 0}}>{<img width="35" height="35" src={asset.logourl}></img>}</TableCell>
                                                 <TableCell sx ={{border: 0}}>{asset.cryptoid}</TableCell>
-                                                <TableCell sx ={{border: 0}}>{asset.label}</TableCell>
+                                                <TableCell sx ={{border: 0}}><Link component="button" onClick={() => handleOpenUpdateModal(asset)}>{asset.label}</Link></TableCell>
                                                 <TableCell sx ={{border: 0}}>{formatAddress(asset.publicaddress)}</TableCell>
                                                 <TableCell sx ={{border: 0}}>{asset.amount}</TableCell>
                                                 <TableCell sx ={{border: 0}}>{asset.value}</TableCell>
                                             </TableRow>
                                         )
-
 
                                     })}
 
@@ -196,6 +256,27 @@ export default function Dashboard() {
                         </TableContainer>
                     </Grid>
                 </Grid>
+
+                <Modal
+                    open={openUpdateModal}
+                    onClose={handleCloseUpdateModal}
+                    >
+                        <Box sx={modalStyle}>
+                            <Typography sx={{mb: 0, fontSize: 20}} align="center">UPDATE/DELETE AN ASSET</Typography>
+                            
+                            <Box sx={{border: '1px solid rgb(238,241,244)', padding: 4, display: 'flex', flexDirection: 'column', justifyContent: 'space-between',height: 250}}>
+                                <Typography variant="p" sx={{mt: -2, fontSize: 12, color:'red'}} align="center">{addFormErr}</Typography>
+                                <TextField required onChange={e => setLabelUM(e.target.value)} autoComplete="off" id="outlined-basic" label="Label" variant="outlined" defaultValue={labelUM}></TextField>
+                                <TextField required onChange={e => setPublicAddressUM(e.target.value)} autoComplete="off" id="outlined-basic" label="Public Address" variant="outlined" defaultValue={publicAddressUM}/>
+                                <TextField required onChange={e => setAmountUM(e.target.value)} autoComplete="off" id="outlined-basic" label="Amount Owned" variant="outlined" defaultValue={amountUM}/>
+                            </Box>
+
+                            <Box sx={{border: 0, height: 30, pl: 8, pr: 8, mt: 2,  display: 'flex', alignContents: 'center', justifyContent: 'space-between', flexDirection: 'row'}}>
+                                <Button sx={{width: 100}} onClick={handleUpdateAsset} variant="contained">Update</Button>
+                                <Button sx={{width: 100}} onClick={handleDeleteAsset} variant="contained">Delete</Button>
+                            </Box>
+                        </Box>
+                </Modal>
 
 
 
