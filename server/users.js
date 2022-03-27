@@ -9,6 +9,7 @@ router.use(authorizeUser)
 router.get("/:userId/assets", async (req, res) => {
     const { userId } = req.params
 
+
     if (req.userIdFromJWT != userId) return res.status(400).send("Invalid credentials.")
 
     try {
@@ -23,6 +24,7 @@ router.get("/:userId/assets", async (req, res) => {
 
         for (let asset of rows) {
             asset["value"] = `$${(asset["amount"] * asset["usdprice"]).toFixed(2)}`
+            asset["usdprice"] = `$${asset["usdprice"].toFixed(2)}`
         }
 
         res.json(rows)
@@ -60,6 +62,10 @@ router.get("/:userId/assets/:searchKey", async (req, res) => {
             || asset["cryptoid"].toLowerCase().includes(lowerCaseSearchKey) 
             || asset["amount"].toString().toLowerCase().includes(lowerCaseSearchKey)
         } )
+
+        for (let asset of rows) {
+            asset["usdprice"] = `$${asset["usdprice"].toFixed(2)}`
+        }
 
         res.json(rows)
 
@@ -101,12 +107,12 @@ router.delete("/:userId/assets/:ownsId", async (req, res) => {
     if (req.userIdFromJWT != userId) return res.status(400).send("Invalid credentials.")
 
     try {
-        const deletionQuery = await req.dbClient.query(`DELETE FROM OWNS WHERE id = ${ownsId} AND userId = '${userId}' RETURNING *`)
+        const deletionQuery = await req.dbClient.query(`DELETE FROM OWNS WHERE id = ${ownsId} AND userId = ${userId} RETURNING *`)
         if (deletionQuery.rows.length == 0) return res.status(400).send("Cannot delete: asset does not exist.")
         res.sendStatus(200)
     }
     catch (err) {
-        console.log(err)
+        console.log(err.message)
         return res.status(500).send("Internal Server Error")
     }
 })

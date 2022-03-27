@@ -1,6 +1,6 @@
 
 ### CREATE ACCOUNT
-POST http://localhost:5000/accounts/user HTTP/1.1
+POST http://localhost:5000/accounts/user/login HTTP/1.1
 content-type: application/json
 
 {
@@ -10,7 +10,7 @@ content-type: application/json
 }
 
 ### SIGN IN 
-GET http://localhost:5000/accounts/user HTTP/1.1
+GET http://localhost:5000/accounts/user/signup HTTP/1.1
 content-type: application/json
 
 {

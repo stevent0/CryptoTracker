@@ -5,8 +5,9 @@ const router = express.Router()
 
 
 
-router.get('/user', async (req, res) => {
+router.post('/user/login', async (req, res) => {
     const {email, password} = req.body
+
 
     if (!email || !password) return res.sendStatus(400)
 
@@ -43,7 +44,7 @@ router.get('/user', async (req, res) => {
 
 }) 
 
-router.post('/user', async (req, res) => {
+router.post('/user/signup', async (req, res) => {
 
     const {name, email, password, confirmPassword} = req.body
 

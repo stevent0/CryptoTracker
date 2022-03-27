@@ -1,22 +1,27 @@
-const axios = require('axios')
+import axios from 'axios'
 
 const URI = `http://localhost:5000`
 
-async function logIn(email, password) {
+export async function logIn(email, password) {
+
     return await axios({
-        method: 'get',
-        url: `${URI}/accounts/user`,
+        method: 'post',
+        url: `${URI}/accounts/user/login`,
         data: {
-            email,
-            password,
+            "email": email,
+            "password": password,
+        },
+        headers: {
+            "Content-Type": "application/json",
+            'Accept': 'application/json',
         }
     })
 }
 
-async function signUp(name, email, password, confirmPassword) {
+export async function signUp(name, email, password, confirmPassword) {
     return await axios({
         method: 'post',
-        url: `${URI}/accounts/user`,
+        url: `${URI}/accounts/user/signup`,
         data: {
             name,
             email,
@@ -26,7 +31,7 @@ async function signUp(name, email, password, confirmPassword) {
     })
 }
 
-async function addAsset(userId, asset, jwt) {
+export async function addAsset(userId, asset, jwt) {
     const { cryptoId, label, publicAddress, amount } = asset
     return await axios({
         method: 'post',
@@ -44,7 +49,7 @@ async function addAsset(userId, asset, jwt) {
     })
 }
 
-async function getAssets(userId, jwt, searchKey) {
+export async function getAssets(userId, jwt, searchKey) {
 
     let url = `${URI}/users/${userId}/assets`
     if (searchKey) url += `/${searchKey}`
@@ -58,7 +63,7 @@ async function getAssets(userId, jwt, searchKey) {
     })
 }
 
-async function deleteAsset(userId, assetId, jwt) {
+export async function deleteAsset(userId, assetId, jwt) {
     return await axios({
         method: 'delete',
         url: `${URI}/users/${userId}/assets/${assetId}`,
@@ -68,7 +73,7 @@ async function deleteAsset(userId, assetId, jwt) {
     })
 }
 
-async function updateAsset(userId, assetId, updates, jwt) {
+export async function updateAsset(userId, assetId, updates, jwt) {
 
     return await axios({
         method: 'patch',
@@ -80,7 +85,7 @@ async function updateAsset(userId, assetId, updates, jwt) {
     })
 }
 
-async function getAssetsValueOfUser(userId, jwt) {
+export async function getAssetsValueOfUser(userId, jwt) {
     return await axios({
         method: 'get',
         url: `${URI}/users/${userId}/assets-value`,
@@ -111,8 +116,8 @@ async function apiTest() {
         // const addAssetRes = await addAsset(userId, {cryptoId: 'ETH', label: 'My ETH XD2', publicAddress: 'addy', amount: 1.53}, jwt)
         // console.log("Successfully added an asset")
  
-        const getAssetsRes = await getAssets(userId, jwt)
-        console.log(getAssetsRes.data)
+        // const getAssetsRes = await getAssets(userId, jwt)
+        // console.log(getAssetsRes.data)
 
         // await deleteAsset(userId, 6, jwt)
         // console.log("Successfully deleted an asset")
@@ -120,17 +125,16 @@ async function apiTest() {
         // await updateAsset(userId, 5, { label: `hehexd`, publicAddress: `addy`, amount: 1.53 }, jwt)
         // console.log("Successfully updated an asset")
 
-        const getAssetValueRes = await getAssetsValueOfUser(userId, jwt)
-        console.log(getAssetValueRes.data)
+        // const getAssetValueRes = await getAssetsValueOfUser(userId, jwt)
+        // console.log(getAssetValueRes.data)
 
-        const supported = await getSupportedAssets("BTC")
-        console.log(supported.data)
+        // const supported = await getSupportedAssets("BTC")
+        // console.log(supported.data)
     }
     catch (err) {
         console.log(err.message)
     }
 
 }
-
 
 
