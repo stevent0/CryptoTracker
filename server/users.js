@@ -88,6 +88,8 @@ router.post("/:userId/assets", async (req, res) => {
 
 
     if (req.userIdFromJWT != userId) return res.status(400).send("Invalid credentials.")
+    if (cryptoId.length == 0 || label.length == 0 || publicAddress.length == 0 || amount.length == 0) return res.status(400).send("All fields must be filled.")
+    if (isNaN(amount)) return res.status(400).send("Amount must be a number.")
 
     try {
         const cryptocurrenciesQuery = await req.dbClient.query(`SELECT * FROM CRYPTOCURRENCY C WHERE C.cryptoId = '${cryptoId}'`)

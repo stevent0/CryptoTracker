@@ -1,8 +1,8 @@
 import {Table, TableContainer, TableHead, TableRow, TableCell, TableBody, Container, Grid, Button, CardContent, Card, Typography, TextField, Paper, InputBase } from '@mui/material'
-import { Box, AppBar, Toolbar, IconButton } from '@mui/material'
+import { Box, AppBar, Toolbar, IconButton, Modal, FormControl, CssBaseline } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import { useEffect } from 'react'
-import { getAssets, logIn, updateAsset, deleteAsset, getAssetsValueOfUser, getHighestAssetValueOfUser } from '../../api/api'
+import { getAssets, logIn, updateAsset, deleteAsset, getAssetsValueOfUser, getHighestAssetValueOfUser, addAsset } from '../../api/api'
 import { useState } from 'react'
 import { InputUnstyled } from '@mui/base'
 import Navbar from '../navbar/navbar.js'
@@ -15,8 +15,51 @@ export default function Dashboard() {
     const [totalAssetValue, setTotalAssetValue] = useState("$0")
     const [searchKey, setSearchKey] = useState('')
     const [highestAssetValue, setHighestAssetValue] = useState({})
+
+    //Modal
+    const [open, setOpen] = useState(false)
+    const handleOpen = () => setOpen(true)
+    const handleClose = () => {setOpen(false); setAddFormErr('')}
+    const [cryptoId, setCryptoId] = useState('')
+    const [label, setLabel] = useState('')
+    const [publicAddress, setPublicAddress] = useState('')
+    const [amount, setAmount] = useState('')
+    const [addFormErr, setAddFormErr] = useState('')
+    
+    const handleAddAsset = async () => {
+        const jwt = Cookies.get('jwt')
+        const userId = parseInt(Cookies.get('userId'))
+
+        try {
+            await addAsset(userId, {cryptoId, label, publicAddress, amount}, jwt)
+            await fetchData(searchKey)
+            handleClose()
+            setCryptoId('')
+            setLabel('')
+            setPublicAddress('')
+            setAmount('')
+            setAddFormErr('')
+        }
+        catch (err) {
+            console.log(err.response.data)
+            setAddFormErr(err.response.data)
+        }
+    }
+
     let navigate = useNavigate()
 
+    const modalStyle = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        height: 420,
+        bgcolor: 'background.paper',
+        border: '0px solid #000',
+        boxShadow: 24,
+        p: 4,
+      }
 
     function formatAddress(address) {
         if (address.length < 10) return address
@@ -91,7 +134,27 @@ export default function Dashboard() {
                             </Paper>
 
                             <Paper elevation={0} sx={{display: "flex", alignItems: "center"}}>
-                                <Button variant="contained" sx={{height: "100%", borderRadius: 3}}>Add</Button>
+                                <Button onClick={handleOpen} variant="contained" sx={{height: "100%", borderRadius: 3}}>Add</Button>
+                                <Modal
+                                    open={open}
+                                    onClose={handleClose}
+                                >
+                                    <Box sx={modalStyle}>
+                                        <Typography sx={{mb: 0, fontSize: 20}} align="center">ADD AN ASSET</Typography>
+                                        
+                                        <Box sx={{border: '1px solid rgb(238,241,244)', padding: 4, display: 'flex', flexDirection: 'column', justifyContent: 'space-between',height: 250}}>
+                                            <Typography variant="p" sx={{mt: -2, fontSize: 12, color:'red'}} align="center">{addFormErr}</Typography>
+                                            <TextField required onChange={e => setCryptoId(e.target.value)} autoComplete="off" id="outlined-basic" label="Cryptocurrency Symbol (e.g. BTC)" variant="outlined" />
+                                            <TextField required onChange={e => setLabel(e.target.value)} autoComplete="off" id="outlined-basic" label="Label" variant="outlined" />
+                                            <TextField required onChange={e => setPublicAddress(e.target.value)} autoComplete="off" id="outlined-basic" label="Public Address" variant="outlined" />
+                                            <TextField required onChange={e => setAmount(e.target.value)} autoComplete="off" id="outlined-basic" label="Amount Owned" variant="outlined" />
+                                        </Box>
+
+                                        <Box sx={{border: 0, pl: 10, pr: 10, height: 60,  display: 'flex', alignContents: 'center', justifyContent: 'center', flexDirection: 'column'}}>
+                                            <Button onClick={handleAddAsset} variant="contained">Add</Button>
+                                        </Box>
+                                    </Box>
+                                </Modal>
                             </Paper>
        
 

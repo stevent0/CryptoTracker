@@ -41,7 +41,6 @@ export async function addAsset(userId, asset, jwt) {
             label,
             publicAddress,
             amount,
-            userId,
         },
         headers: {
             Authorization: `Bearer ${jwt}`
