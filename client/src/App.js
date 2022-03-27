@@ -4,6 +4,7 @@ import Home from './components/home/home'
 import Signup from "./components/signup/signup"
 import Login from "./components/login/login"
 import Dashboard from "./components/dashboard/dashboard"
+import Cookies from 'js-cookie'
 
 function App() {
   return (
