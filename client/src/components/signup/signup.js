@@ -2,6 +2,7 @@ import { Container, Typography, Box, Grid, TextField, Button } from '@mui/materi
 import { useState } from 'react'
 import { signUp } from '../../api/api'
 import { useNavigate } from 'react-router-dom'
+import Cookies from 'js-cookie'
 
 export default function Signup() {
 
@@ -15,8 +16,9 @@ export default function Signup() {
     const handleSignUpClick = async () => {
         try {
             await signUp(name, email, password, confirmPassword)
+            Cookies.set('jwt', '')
+            Cookies.set('userId', '')
             navigate('/login')
-
         }
         catch (err) {
             console.log(err.message)
